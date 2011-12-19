@@ -274,20 +274,20 @@ void create_sorted_runs(merge_sort_conf_t * conf, char * input_filename){
 void merge_sorted_runs(merge_sort_conf_t * conf){
   data_run_pool_t drp;
   int i, pass_idx = 0;
+  data_run_pool_init(conf, &drp);
   while(conf->data_run_cnt > 0){
-    data_run_pool_init(conf, &drp);
     for(i = 0; i<conf->batch_cnt; i++){
       drp.active_runs = (conf->data_run_cnt - i * conf->input_buffer_cnt >= conf->input_buffer_cnt ? conf->input_buffer_cnt : conf->data_run_cnt % conf->input_buffer_cnt);
       data_run_pool_open(conf, &drp, pass_idx, i);
       data_run_pool_merge(conf, &drp);
       data_run_pool_close(conf, &drp);
     }  
-    data_run_pool_free(conf, &drp);
     if (conf->data_run_cnt == 1)
       break;
     merge_sort_conf_update(conf, conf->batch_cnt);  
     pass_idx++;
   }
+  data_run_pool_free(conf, &drp);
 }
 
 void topfive(merge_sort_conf_t * conf, char * input_filename){
