@@ -9,7 +9,9 @@ class EditDistance
     # http://en.wikipedia.org/wiki/Levenshtein_distance
 
     # degenerate cases
-    return 0 if (@term1 == @term2 || @term1.length == 0 || @term2.length == 0)
+    return 0 if @term1 == @term2
+    return @term2.length if @term1.length == 0
+    return @term1.length if @term2.length == 0
  
     # create two work vectors of integer distances
     
